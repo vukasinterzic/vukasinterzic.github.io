@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unicorn Cake Collector</title>
+    <style>
+        canvas {
+            display: block;
+            margin: auto;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="300" height="300"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+          const tileSize = 30;
+          const rows = canvas.height / tileSize;
+          const cols = canvas.width / tileSize;
+
+          let level = 1;
+          let cakesCollected = 0;
+
+          const unicorn = {
+              x: tileSize,
+              y: tileSize,
+              dx: 0,
+              dy: 0,
+              speed: 3,
+              draw() {
+                  ctx.fillStyle = 'white';
+                  ctx.fillRect(this.x, this.y, tileSize, tileSize);
+              },
+              move() {
+                  this.x += this.dx;
+                  this.y += this.dy;
+              },
+          };
+
+          const cake = {
+              x: Math.floor(Math.random() * cols) * tileSize,
+              y: Math.floor(Math.random() * rows) * tileSize,
+              draw() {
+                  ctx.fillStyle = 'pink';
+                  ctx.fillRect(this.x, this.y, tileSize, tileSize);
+              },
+          };
+
+          document.addEventListener('keydown', (e) => {
+              if (e.key === 'ArrowUp') {
+                  unicorn.dx = 0;
+                  unicorn.dy = -unicorn.speed;
+              } else if (e.key === 'ArrowDown') {
+                  unicorn.dx = 0;
+                  unicorn.dy = unicorn.speed;
+              } else if (e.key === 'ArrowLeft') {
+                  unicorn.dx = -unicorn.speed;
+                  unicorn.dy = 0;
+              } else if (e.key === 'ArrowRight') {
+                  unicorn.dx = unicorn.speed;
+                  unicorn.dy = 0;
+              }
+          });
+
+          function checkCollision() {
+              if (unicorn.x === cake.x && unicorn.y === cake.y) {
+                  cakesCollected++;
+                  if (cakesCollected === 10 * level) {
+                      level++;
+                      cakesCollected = 0;
+                      unicorn.speed += 1;
+                  }
+                  cake.x = Math.floor(Math.random() * cols) * tileSize;
+                  cake.y = Math.floor(Math.random() * rows) * tileSize;
+              }
+          }
+
+          function gameLoop() {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              checkCollision();
+              unicorn.move();
+              unicorn.draw();
+              cake.draw();
+
+              if (unicorn.x < 0) {
+                  unicorn.x = 0;
+              }
+              if (unicorn.x >= canvas.width) {
+                  unicorn.x = canvas.width - tileSize;
+              }
+              if (unicorn.y < 0) {
+                  unicorn.y = 0;
+              }
+              if (unicorn.y >= canvas.height) {
+                  unicorn.y = canvas.height - tileSize;
+              }
+
+              requestAnimationFrame(gameLoop);
+          }
+
+          gameLoop();
+</script>
+</body>
+</html>
+  
+  
+  
