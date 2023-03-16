@@ -1,0 +1,101 @@
+<!--This is an example form created by ChatGPT--->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP Submission Form</title>
+    <style>
+        body {
+            background-color: blue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        label, input, select {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>MVP Submission Form</h1>
+        <form id="mvp-form">
+            <label for="activity-title">Activity Title:</label>
+            <input type="text" id="activity-title" name="activity-title" required>
+                  <label for="activity-category">Activity Category:</label>
+        <select id="activity-category" name="activity-category">
+            <option value="category1">Category 1</option>
+            <option value="category2">Category 2</option>
+            <option value="category3">Category 3</option>
+        </select>
+
+        <label for="url">URL:</label>
+        <input type="url" id="url" name="url" required>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('mvp-form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const data = {
+            'activity-title': formData.get('activity-title'),
+            'activity-category': formData.get('activity-category'),
+            'url': formData.get('url'),
+            'date': formData.get('date')
+        };
+
+        const response = await fetch('save_to_csv.php', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            alert('Submission successful!');
+            form.reset();
+        } else {
+            alert('Submission failed. Please try again.');
+        }
+    });
+</script>
+
+ </body>
+</html>
+
+<!-- 
+Note that this HTML file assumes you have a server-side script called save_to_csv.php to handle the actual saving of data to a CSV file. Since HTML alone cannot interact with the file system, you'll need a server-side language like PHP, Python, or Node.js to handle the file manipulation. 
+-->
+  
+  
+  
+  
+  
+  
+  
+  
+  
